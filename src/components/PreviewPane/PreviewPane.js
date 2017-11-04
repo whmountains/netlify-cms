@@ -140,20 +140,23 @@ export default class PreviewPane extends React.Component {
     const styleEls = registry.getPreviewStyles()
        .map((style, i) => <link key={i} href={style} type="text/css" rel="stylesheet" />);
 
-    if (!collection) {
-      return <Frame className="nc-previewPane-frame" head={styleEls} />;
-    }
-
-    return (<Frame
-      className="nc-previewPane-frame"
-      head={styleEls}
-      initialContent={`
+    const initialContent = `
 <!DOCTYPE html>
 <html>
   <head><base target="_blank"/></head>
   <body><div></div></body>
-</html>`}
-    ><PreviewContent {...{ previewComponent, previewProps }}/></Frame>);
+</html>
+`;
+
+    if (!collection) {
+      return <Frame className="nc-previewPane-frame" head={styleEls} />;
+    }
+
+    return (
+      <Frame className="nc-previewPane-frame" head={styleEls} initialContent={initialContent}>
+        <PreviewContent {...{ previewComponent, previewProps }}/>
+      </Frame>
+    );
   }
 }
 
