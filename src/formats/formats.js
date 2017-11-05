@@ -42,9 +42,20 @@ export function resolveFormat(collectionOrEntity, entry) {
   if (typeof collectionOrEntity === 'string') {
     return formatByType(collectionOrEntity);
   }
+
+  const format = collectionOrEntity.get('format');
   const path = entry && entry.path;
-  if (path) {
-    return formatByExtension(path.split('.').pop());
+
+  // If no format is set for the collection, try to infer the format from the file extension.
+  if (!format && path) {
+    const extension = path.split('.').pop();
+    return formatByExtension(extension);
   }
-  return formatByName(collectionOrEntity.get('format'));
+
+  /**
+   * If the format is specified in the collection,
+   *  then we will use that format. If it is undefined,
+   *  we can still use this function to return the default.
+   */
+  return formatByName(format);
 }
